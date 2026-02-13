@@ -1,0 +1,605 @@
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Функциональная матрица финансового менеджмента</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #0b1020;
+      --card-bg: #0f172a;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.35);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.75);
+      --transition-fast: 0.22s ease-out;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top left, #1e293b 0, #020617 50%, #000 100%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .title {
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: linear-gradient(120deg, #38bdf8, #a855f7, #f97316);
+      background-size: 200% 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: titleGradient 6s ease-in-out infinite alternate;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    @keyframes titleGradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+
+    /* Базовая сетка макета */
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    /* Карточка блока (БЛОК 1) */
+    .block-card {
+      background: radial-gradient(circle at top left, #1f2937 0, #020617 55%);
+      border-radius: 26px;
+      padding: 20px 20px 22px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .block-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.18) 0, transparent 60%),
+        radial-gradient(circle at 100% 0, rgba(168, 85, 247, 0.13) 0, transparent 55%);
+      opacity: 0.9;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .block-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .block-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 10px;
+      backdrop-filter: blur(18px);
+    }
+
+    .block-label-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--accent) 0, transparent 70%);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.8);
+    }
+
+    .block-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .block-title span {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .block-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Сетка карточек навыков: прямоугольники одинаковой высоты в строке */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 6px;
+      align-items: stretch; /* растягиваем элементы по высоте строки [web:4][web:7] */
+    }
+
+    .skill-card {
+      position: relative;
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.88)
+      );
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.7);
+      overflow: hidden;
+      cursor: default;
+      transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast),
+        background var(--transition-fast);
+      display: flex;          /* делаем карточку флекс‑контейнером [web:8] */
+      flex-direction: column;
+      height: 100%;           /* заполняет всю высоту grid‑ячейки [web:4][web:7] */
+    }
+
+    .skill-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.04), transparent 60%);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      pointer-events: none;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.95);
+      border-color: rgba(56, 189, 248, 0.75);
+      background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(30, 64, 175, 0.9)
+      );
+    }
+
+    .skill-card:hover::before {
+      opacity: 1;
+    }
+
+    .skill-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .skill-title span {
+      font-size: 11px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+    }
+
+    .skill-list {
+      font-size: 12px;
+      color: var(--text-muted);
+      list-style: none;
+      line-height: 1.45;
+    }
+
+    .skill-list li::before {
+      content: "•";
+      color: var(--accent-2);
+      margin-right: 6px;
+    }
+
+    /* Кейсы: прямоугольники одинаковой высоты в строке */
+    .cases {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      align-items: stretch; /* равная высота карточек кейсов [web:4][web:7] */
+    }
+
+    .case-card {
+      position: relative;
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 12px 14px 13px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      display: flex;          /* флекс‑контейнер для растяжения контента [web:8] */
+      flex-direction: column;
+      height: 100%;           /* прямоугольник на всю высоту grid‑ячейки [web:4][web:7] */
+    }
+
+    .case-accent {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(56, 189, 248, 0.08),
+        rgba(168, 85, 247, 0.06)
+      );
+      mix-blend-mode: screen;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .case-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-bottom: 6px;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .case-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .case-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Правая колонка – одна вертикальная колонка карточек */
+    .side-panel {
+      display: flex;
+      flex-direction: column; /* блоки 2, 3 и Toolkit идут столбиком [web:20] */
+      gap: 18px;
+    }
+
+    .panel-card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 22px;
+      padding: 16px 18px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      box-shadow: var(--shadow-soft);
+      width: 100%;           /* занимает всю ширину правой колонки [web:19] */
+      box-sizing: border-box;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-title span {
+      font-size: 11px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .tool-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tool-tag {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.96));
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .tool-tag--accent {
+      border-color: rgba(56, 189, 248, 0.9);
+      background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.8), rgba(15, 23, 42, 0.96));
+    }
+
+    .mini-list {
+      list-style: none;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .mini-list li + li {
+      margin-top: 4px;
+    }
+
+    .mini-list span {
+      color: var(--accent);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 880px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .side-panel {
+        order: -1;
+      }
+
+      .block-card {
+        padding: 16px 16px 18px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .page {
+        padding-inline: 14px;
+      }
+
+      .block-card {
+        border-radius: 22px;
+      }
+
+      .skills-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .cases {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .panel-card {
+        padding-inline: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1 class="title">Функциональная матрица финансового менеджмента</h1>
+      <p class="subtitle">
+        Структурированный обзор блоков аналитики, себестоимости функций и налоговой нагрузки.
+      </p>
+    </header>
+
+    <main class="layout">
+      <!-- Левая часть – основные блоки и кейсы -->
+      <section class="block-card">
+        <div class="block-inner">
+          <div class="block-label">
+            <span class="block-label-dot"></span>
+            Блок 1
+          </div>
+          <div class="block-title">
+            <div>Анализ финансового результата + анализ поставщиков</div>
+            <span>Expenses & Vendors</span>
+          </div>
+          <p class="block-description">
+            Детализированный разбор ключевых статей расходов, цепочки поставщиков услуг и товаров и их влияние на финансовый результат.
+          </p>
+
+          <!-- Карточки навыков / подпроцессов -->
+          <div class="skills-grid">
+            <article class="skill-card">
+              <div class="skill-title">
+                <div>1. Персонал и HR цикл</div>
+                <span>HR COST</span>
+              </div>
+              <ul class="skill-list">
+                <li>ФОТ АУП</li>
+                <li>Прочие выплаты</li>
+                <li>HR маркетинг</li>
+                <li>Расходы на привлечение и удержание</li>
+                <li>Обучение и развитие</li>
+              </ul>
+            </article>
+
+            <article class="skill-card">
+              <div class="skill-title">
+                <div>2. Офисная инфраструктура</div>
+                <span>OFFICE</span>
+              </div>
+              <ul class="skill-list">
+                <li>Аренда недвижимости</li>
+                <li>Коммунальные расходы и содержание офиса</li>
+                <li>Мебель</li>
+                <li>Переоснащение и капитальный ремонт</li>
+                <li>Расходы на канцелярию</li>
+              </ul>
+            </article>
+
+            <article class="skill-card">
+              <div class="skill-title">
+                <div>3. Маркетинг</div>
+                <span>MARKETING</span>
+              </div>
+              <ul class="skill-list">
+                <li>Анализ статьи расходов по маркетингу</li>
+              </ul>
+            </article>
+
+            <article class="skill-card">
+              <div class="skill-title">
+                <div>4. IT и ПО</div>
+                <span>IT</span>
+              </div>
+              <ul class="skill-list">
+                <li>Оргтехника и программное обеспечение</li>
+              </ul>
+            </article>
+
+            <article class="skill-card">
+              <div class="skill-title">
+                <div>5. Сопровождение бизнеса</div>
+                <span>SUPPORT</span>
+              </div>
+              <ul class="skill-list">
+                <li>Расходы на сопровождение бизнеса</li>
+              </ul>
+            </article>
+
+            <article class="skill-card">
+              <div class="skill-title">
+                <div>6. Налоговая нагрузка</div>
+                <span>TAX</span>
+              </div>
+              <ul class="skill-list">
+                <li>Планирование и прогнозирование налогов</li>
+                <li>Анализ резервов сокращения</li>
+                <li>Интеграция с бухгалтерией ЦО</li>
+              </ul>
+            </article>
+          </div>
+
+          <!-- Кейсы -->
+          <div class="cases">
+            <article class="case-card">
+              <div class="case-accent"></div>
+              <div class="case-inner">
+                <div class="case-tag">Кейс</div>
+                <h3 class="case-title">Оптимизация ФОТ и HR‑маркетинга</h3>
+                <p class="case-text">
+                  Модель, связывающая ФОТ, HR‑воронку, обучение и удержание, чтобы оценить реальную стоимость найма и загрузки персонала.
+                </p>
+              </div>
+            </article>
+
+            <article class="case-card">
+              <div class="case-accent"></div>
+              <div class="case-inner">
+                <div class="case-tag">Кейс</div>
+                <h3 class="case-title">Матрица офисных расходов</h3>
+                <p class="case-text">
+                  Сводная матрица аренды, коммунальных платежей и капвложений с расчетом удельной стоимости на выручку и сотрудника.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Правая часть – блоки 2–3 и инструменты -->
+      <aside class="side-panel">
+        <section class="panel-card">
+          <h2 class="panel-title">
+            Блок 2: Анализ направлений
+            <span>Product Lines</span>
+          </h2>
+          <ul class="mini-list">
+            <li>1. Анализ направления <span>«Аренда»</span></li>
+            <li>2. Анализ направления <span>«Загородная недвижимость»</span></li>
+            <li>3. Анализ направления <span>«Коммерческая недвижимость»</span></li>
+            <li>4. Анализ направления <span>«Новостройки»</span></li>
+            <li>5. Анализ направления <span>«Вторичная недвижимость»</span></li>
+          </ul>
+        </section>
+
+        <section class="panel-card">
+          <h2 class="panel-title">
+            Блок 3: Анализ функций
+            <span>Functions</span>
+          </h2>
+          <ul class="mini-list">
+            <li>1. Расчет и анализ себестоимости функций HR отдела</li>
+            <li>2. Расчет и анализ себестоимости юридического отдела</li>
+            <li>3. Расчет и анализ себестоимости ипотечного отдела</li>
+          </ul>
+        </section>
+
+        <section class="panel-card">
+          <h2 class="panel-title">
+            Инструменты и стек
+            <span>Toolkit</span>
+          </h2>
+          <div class="tool-tags">
+            <div class="tool-tag tool-tag--accent">Financial Modeling</div>
+            <div class="tool-tag">Unit‑экономика</div>
+            <div class="tool-tag">ABC/XYZ‑анализ</div>
+            <div class="tool-tag">Power BI / Looker</div>
+            <div class="tool-tag">Excel / Google Sheets</div>
+            <div class="tool-tag">SQL / DWH</div>
+            <div class="tool-tag">BI‑дашборды</div>
+            <div class="tool-tag">Бюджетирование</div>
+            <div class="tool-tag">Факторный анализ</div>
+            <div class="tool-tag">Когортный анализ</div>
+            <div class="tool-tag">Сценарное моделирование</div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+</body>
+</html>
